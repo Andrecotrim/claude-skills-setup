@@ -1,0 +1,23 @@
+# Ignorar tudo por padrão
+*
+
+# Permitir este arquivo
+!.gitignore
+
+# Configurações principais
+!settings.json
+!settings.local.json
+
+# Plugins - apenas configuração, não cache
+!plugins/
+plugins/*
+!plugins/known_marketplaces.json
+
+# Memórias dos projetos
+!projects/
+projects/*
+!projects/*/
+projects/*/*
+!projects/*/memory/
+projects/*/memory/*
+!projects/*/memory/*.md

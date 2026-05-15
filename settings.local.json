@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(systemctl is-enabled:*)",
+      "Bash(docker update:*)",
+      "WebFetch(domain:claude.com)"
+    ]
+  }
+}
