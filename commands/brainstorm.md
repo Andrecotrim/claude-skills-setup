@@ -96,8 +96,12 @@ Seções sem informação: "A definir".
 - [Decisão ainda não definida]
 ```
 
-Após salvar, informe:
+Após salvar, pergunte:
 
-> "O arquivo `_docs/brainstorm.md` foi gerado. Você pode iniciar o pipeline com
-> `/laravel-pipeline` para dar sequência ao planejamento e desenvolvimento."
-```
+> "O `_docs/brainstorm.md` foi gerado. Deseja iniciar o pipeline agora com `/laravel-pipeline`
+> ou quer explorar mais algum assunto antes?"
+
+- Se o usuário quiser acrescentar algo: retome a conversa normalmente, atualize o arquivo
+  ao final e repita a pergunta.
+- Se o usuário confirmar que quer iniciar: responda com `Pode iniciar com /laravel-pipeline`.
+  Não execute o pipeline automaticamente — aguarde o usuário invocar o comando.
