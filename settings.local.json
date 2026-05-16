@@ -29,7 +29,8 @@
       "Bash(cp ~/.claude/settings.local.json /tmp/claude-skills-setup/settings.local.json)",
       "Bash(mkdir -p /tmp/claude-skills-setup/commands)",
       "Bash(cp ~/.claude/commands/brainstorm.md /tmp/claude-skills-setup/commands/brainstorm.md)",
-      "Bash(cp ~/.claude/commands/laravel-pipeline.md /tmp/claude-skills-setup/commands/laravel-pipeline.md)"
+      "Bash(cp ~/.claude/commands/laravel-pipeline.md /tmp/claude-skills-setup/commands/laravel-pipeline.md)",
+      "Bash(grep -v \"^$\")"
     ]
   }
 }
