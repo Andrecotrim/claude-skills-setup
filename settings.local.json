@@ -1,9 +1,35 @@
 {
   "permissions": {
     "allow": [
+      "Read(//tmp/**)",
+      "Bash(wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O google-chrome.deb)",
+      "Bash(sudo apt:*)",
+      "Bash(wget -q \"https://update.code.visualstudio.com/latest/linux-deb-x64/insider\" -O vscode-insiders.deb)",
+      "Bash(wget -q \"https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb\" -O dbeaver.deb)",
+      "Bash(php -v)",
+      "Bash(systemctl is-active:*)",
+      "Bash(dpkg -l)",
+      "Bash(sudo systemctl:*)",
+      "Bash(echo \"Apache: $?\")",
+      "Bash(sudo add-apt-repository:*)",
+      "Bash(flameshot --version)",
+      "Bash(gsettings get:*)",
+      "Bash(gsettings set:*)",
+      "Bash(systemctl --user status xdg-desktop-portal xdg-desktop-portal-gnome)",
+      "Bash(journalctl --user -u flameshot)",
+      "Bash(journalctl -b)",
+      "Bash(curl -fsSL https://opencode.ai/install)",
+      "Bash(bash)",
+      "Bash(lsb_release -a)",
       "Bash(systemctl is-enabled:*)",
       "Bash(docker update:*)",
-      "WebFetch(domain:claude.com)"
+      "WebFetch(domain:claude.com)",
+      "Bash(git *)",
+      "Bash(cp ~/.claude/settings.json /tmp/claude-skills-setup/settings.json)",
+      "Bash(cp ~/.claude/settings.local.json /tmp/claude-skills-setup/settings.local.json)",
+      "Bash(mkdir -p /tmp/claude-skills-setup/commands)",
+      "Bash(cp ~/.claude/commands/brainstorm.md /tmp/claude-skills-setup/commands/brainstorm.md)",
+      "Bash(cp ~/.claude/commands/laravel-pipeline.md /tmp/claude-skills-setup/commands/laravel-pipeline.md)"
     ]
   }
 }

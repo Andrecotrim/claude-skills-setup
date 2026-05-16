@@ -13,6 +13,11 @@
 plugins/*
 !plugins/known_marketplaces.json
 
+# Comandos customizados (skills)
+!commands/
+commands/*
+!commands/*.md
+
 # Memórias dos projetos
 !projects/
 projects/*
