@@ -113,9 +113,49 @@ Restrições: não planeje, não decida arquitetura. Execute o que foi especific
 
 ---
 
-## AGENTE 4 — QA de UX/UI
+## AGENTE 4 — QA Back-end
 
 **Entrada:** `_docs/especificacao.md` + `_docs/progresso.md` + código implementado
+**Saída:** testes em `tests/` + `_docs/relatorio-testes.md`
+
+Missão:
+1. Leia `especificacao.md` e `progresso.md` para entender o que foi implementado.
+2. Para cada módulo, escreva testes cobrindo:
+
+   **Testes de Unidade**
+   - Classes Brain (`Process`, `Task`, `Action`, `Query`, `Workflow`): teste cada método público isoladamente com mocks das dependências
+   - Models: escopos, relacionamentos, mutators e accessors
+   - Form Requests: regras de validação (casos válidos e inválidos)
+
+   **Testes de Feature (HTTP)**
+   - Todos os endpoints definidos na especificação: status code, estrutura do response, efeitos colaterais no banco
+   - Fluxos de autenticação e autorização (acesso permitido e negado)
+   - Casos de borda: dados inválidos, recursos inexistentes, permissões insuficientes
+
+3. Use `php artisan make:test` para scaffolding e prefira **Pest** quando disponível no projeto.
+4. Use `laravel-boost` para executar os testes e inspecionar o resultado:
+   - `php artisan test --coverage` para cobertura geral
+   - `php artisan test --filter NomeDoTeste` para isolar falhas
+5. Use `php-lsp` para validar os arquivos de teste gerados (sem erros de tipo ou sintaxe).
+6. Use `pr-review-toolkit` para análise de cobertura e identificação de fluxos não cobertos.
+7. Use `semgrep` para análise estática de segurança sobre o código implementado — reporte
+   qualquer vulnerabilidade encontrada em `_docs/relatorio-testes.md`.
+8. Todos os testes devem passar (`green`) antes de avançar. Se houver falhas:
+   - Registre em `_docs/relatorio-testes.md` com descrição da falha e sugestão de correção
+   - Sinalize ao usuário e aguarde correção pelo Agente 3 antes de re-executar
+9. Registre em `_docs/relatorio-testes.md`:
+   - Total de testes escritos por módulo
+   - Cobertura alcançada (%)
+   - Falhas encontradas e status de resolução
+   - Vulnerabilidades reportadas pelo semgrep
+
+Restrições: não altere código de produção. Se encontrar bug, registre e solicite correção ao Agente 3.
+
+---
+
+## AGENTE 5 — QA de UX/UI
+
+**Entrada:** `_docs/especificacao.md` + `_docs/progresso.md` + `_docs/relatorio-testes.md` + código implementado
 **Saída:** `_docs/relatorio-qa.md`
 
 Missão:
@@ -155,15 +195,15 @@ Missão:
    - Após correções pelo Agente 3, re-execute os testes dos itens corrigidos
    - Atualize `relatorio-qa.md` com o resultado
 
-5. Somente prossiga ao Agente 5 quando não houver itens `crítico` ou `alto` em aberto.
+5. Somente prossiga ao Agente 6 quando não houver itens `crítico` ou `alto` em aberto.
 
 Restrições: não altere código. Apenas reporte e solicite correções ao Agente 3.
 
 ---
 
-## AGENTE 5 — Code Reviewer
+## AGENTE 6 — Code Reviewer
 
-**Entrada:** `_docs/especificacao.md` + `_docs/relatorio-qa.md` + código implementado
+**Entrada:** `_docs/especificacao.md` + `_docs/relatorio-qa.md` + `_docs/relatorio-testes.md` + código implementado
 **Saída:** `_docs/review.md` + refatorações aplicadas diretamente no código
 
 Missão:
@@ -199,6 +239,8 @@ Missão:
    - Sem credenciais ou tokens hardcoded no código
    - CSRF protection ativo nos formulários
    - Mass assignment protegido (`$fillable` ou `$guarded` nas Models)
+   - Consulte `_docs/relatorio-testes.md` para vulnerabilidades já reportadas pelo semgrep
+     no Agente 4 — verifique se foram corrigidas antes de executar `/security-review`.
    - Execute `/security-review` para auditoria especializada de segurança sobre
      o código implementado.
 
@@ -241,4 +283,4 @@ Restrições: não adicione funcionalidades novas. Apenas melhore o que existe.
 - Todos os arquivos `.md` ficam em `_docs/` na raiz do projeto.
 - Arquivos gerados por cada agente:
   - `_docs/brainstorm.md` → `_docs/plano.md` → `_docs/especificacao.md`
-  - `_docs/progresso.md` → `_docs/relatorio-qa.md` → `_docs/review.md`
+  - `_docs/progresso.md` → `_docs/relatorio-testes.md` → `_docs/relatorio-qa.md` → `_docs/review.md`
