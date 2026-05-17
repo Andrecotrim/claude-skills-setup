@@ -52,9 +52,27 @@ Missão:
    - Padrões de design adotados (Repository, Service Layer, etc.)
    - Componentes de UI/UX envolvidos: quais views, quais Blade components,
      quais dados cada view recebe, fluxo de navegação entre páginas
-3. Utilize o plugin `context7` para consultar a documentação atual do Laravel ao
+3. **Padrões r2luna/brain — aplique sempre que adequado:**
+   - Use **`Process`** para operações de negócio com múltiplas etapas sequenciais
+     (ex: fechar comanda, processar venda no PDV, emitir relatório financeiro).
+     Um Process orquestra Tasks e carrega contexto entre etapas.
+   - Use **`Task`** para unidades de trabalho discretas e reutilizáveis que podem ser
+     compostas em Processes ou Workflows (ex: decrementar estoque, registrar
+     movimentação de caixa, enviar notificação, calcular total de itens).
+     Tasks são o bloco fundamental — prefira-as a métodos privados em Services.
+   - Use **`Workflow`** para orquestrar múltiplos Processes em sequência ou paralelo
+     quando o fluxo de negócio envolve decisões condicionais entre etapas maiores.
+   - Use **`Action`** para operações de responsabilidade única e sem etapas internas
+     (ex: atualizar status de mesa, aplicar desconto, arquivar registro).
+     Prefira Action a Service quando a operação é atômica.
+   - Use **`Query`** para encapsular consultas complexas ao banco de dados, evitando
+     lógica de query em Controllers ou Models (ex: relatório de vendas por período,
+     ranking de produtos mais vendidos, saldo de caixa consolidado).
+   - Na especificação, indique explicitamente o tipo Brain de cada classe:
+     `[Brain:Process]`, `[Brain:Task]`, `[Brain:Action]`, `[Brain:Query]`, `[Brain:Workflow]`.
+4. Utilize o plugin `context7` para consultar a documentação atual do Laravel ao
    especificar APIs, assinaturas de métodos e comportamentos do framework.
-4. Salve em `_docs/especificacao.md`.
+5. Salve em `_docs/especificacao.md`.
 
 Stack obrigatório: Laravel (versão do projeto). Respeite convenções Laravel e PSR.
 Restrições: não escreva código de implementação. Apenas especifique.
@@ -70,16 +88,25 @@ Missão:
 1. Leia `especificacao.md` na íntegra.
 2. Implemente SOMENTE o que está descrito — sem adicionar funcionalidades,
    sem alterar nomes ou estrutura de banco de dados definidos.
-3. Use `php artisan make:*` sempre que possível.
-4. Siga rigorosamente as convenções do Laravel: Eloquent, migrations,
+3. Use `php artisan make:*` sempre que possível para scaffolding padrão Laravel.
+4. **Para classes marcadas com tipo Brain na especificação, use os comandos:**
+   - `php artisan brain:make:process NomeDominio/NomeProcess` → `[Brain:Process]`
+   - `php artisan brain:make:task NomeDominio/NomeTask` → `[Brain:Task]`
+   - `php artisan brain:make:action NomeDominio/NomeAction` → `[Brain:Action]`
+   - `php artisan brain:make:query NomeDominio/NomeQuery` → `[Brain:Query]`
+   - `php artisan brain:make:workflow NomeDominio/NomeWorkflow` → `[Brain:Workflow]`
+   - Organize sempre por domínio de negócio (ex: `Caixa/FecharComanda`,
+     `Estoque/DecrementarProduto`, `Financeiro/CalcularSaldo`).
+   - Após implementar, rode `php artisan brain:show` para validar o mapeamento.
+5. Siga rigorosamente as convenções do Laravel: Eloquent, migrations,
    form requests, resource controllers, Blade.
-5. Verifique os diagnósticos do plugin `php-lsp` (Intelephense) — corrija todos os erros
+6. Verifique os diagnósticos do plugin `php-lsp` (Intelephense) — corrija todos os erros
    e warnings reportados antes de avançar ao próximo módulo.
-6. Use `context7` para consultar a documentação do Laravel sempre que precisar verificar
+7. Use `context7` para consultar a documentação do Laravel sempre que precisar verificar
    APIs, assinaturas de métodos ou comportamentos do Eloquent.
-7. Ao concluir cada módulo, registre em `_docs/progresso.md`:
+8. Ao concluir cada módulo, registre em `_docs/progresso.md`:
    - O que foi implementado
-   - Arquivos criados ou modificados
+   - Arquivos criados ou modificados (incluindo classes Brain geradas)
    - Pendências ou dúvidas encontradas
 
 Restrições: não planeje, não decida arquitetura. Execute o que foi especificado.
@@ -144,12 +171,20 @@ Missão:
 2. Percorra todo o código implementado e avalie:
 
    **Boas práticas Laravel**
-   - Controllers estão enxutos? Lógica de negócio está em Services ou Actions?
+   - Controllers estão enxutos? Lógica de negócio está em Services, Actions ou Processes?
    - Models têm responsabilidades corretas (sem lógica de apresentação)?
    - Uso correto de Eloquent: evitar N+1 (eager loading com `with()`)?
    - Migrations reversíveis e com `down()` implementado?
    - Form Requests usados em todos os endpoints que recebem dados?
    - Policies ou Gates aplicados onde há autorização?
+
+   **Uso de r2luna/brain**
+   - Operações de negócio com múltiplas etapas estão encapsuladas em `Process`?
+   - Unidades de trabalho reutilizáveis estão extraídas como `Task`?
+   - Consultas complexas estão em classes `Query` em vez de métodos em Controllers/Models?
+   - Operações atômicas de responsabilidade única usam `Action` em vez de métodos avulsos?
+   - Execute `php artisan brain:show` e verifique se o mapeamento reflete a arquitetura
+     especificada. Corrija qualquer classe que deveria ser Brain mas não foi gerada assim.
 
    **Qualidade de código**
    - Remover código morto, métodos não utilizados, variáveis desnecessárias

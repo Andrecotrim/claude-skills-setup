@@ -35,6 +35,7 @@ Marque mentalmente cada ponto conforme for sendo respondido — inclusive por re
 - [ ] Restrições e o que está fora do escopo
 - [ ] Stack de tecnologias (pergunte se não for óbvio pelo contexto)
 - [ ] Questões em aberto
+- [ ] Insights para versões futuras (ideias surgidas na conversa mas explicitamente fora do escopo atual)
 
 ---
 
@@ -94,6 +95,12 @@ Seções sem informação: "A definir".
 
 ## Questões em aberto
 - [Decisão ainda não definida]
+
+## Insights para versões futuras
+> Ideias e funcionalidades que surgiram durante a conversa mas foram explicitamente deixadas
+> para fases posteriores. Registradas aqui para não se perderem.
+
+- [Ideia ou funcionalidade + contexto de por que ficou para depois]
 ```
 
 Após salvar, pergunte:
