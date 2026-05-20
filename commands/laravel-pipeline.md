@@ -13,6 +13,7 @@ de entrada do próximo exista e esteja completo.
 
 ## ETAPA 0-A — Verificar ou gerar brainstorm.md
 **Fluxo:** nova funcionalidade
+**Modelo:** `claude-sonnet-4-6`
 
 Verifique se existe `_docs/brainstorm.md`.
 - Se existir: leia-o e prossiga para o Agente 1.
@@ -24,6 +25,7 @@ Verifique se existe `_docs/brainstorm.md`.
 
 ## ETAPA 0-B — Checkup (Investigador de Problemas)
 **Fluxo:** correção de bug ou manutenção — acionado manualmente
+**Modelo:** `claude-sonnet-4-6`
 
 **Entrada:** relato do problema ou trecho de log de erro
 **Saída:** seção de diagnóstico preenchida no ticket criado pelo Agente Triagem
@@ -51,6 +53,7 @@ Restrições: não corrija o código. Apenas investigue e documente.
 
 ## AGENTE TRIAGEM
 **Fluxo:** checkup — executado após Etapa 0-B
+**Modelo:** `claude-haiku-4-5-20251001`
 
 **Entrada:** diagnóstico do Checkup
 **Saída:** `_docs/tickets/TICKET-YYYYMMDD-NNN.md` com classificação e caminho definidos
@@ -134,6 +137,7 @@ Restrições: não corrija código. Apenas classifique e crie o ticket.
 ---
 
 ## AGENTE 1 — Planejador de Produto
+**Modelo:** `claude-sonnet-4-6`
 
 **Entrada (fluxo feature):** `_docs/brainstorm.md`
 **Entrada (fluxo checkup complexo):** ticket `_docs/tickets/TICKET-XXX.md` com tipo `complexo`
@@ -156,6 +160,7 @@ Foco exclusivo: O QUÊ deve ser construído ou corrigido.
 ---
 
 ## AGENTE 2 — Arquiteto de Código
+**Modelo:** `claude-opus-4-7`
 
 **Entrada:** `_docs/plano.md`
 **Saída:** `_docs/especificacao.md` + atualiza seção "Especificação" do ticket (se checkup)
@@ -202,6 +207,7 @@ Restrições: não escreva código de implementação. Apenas especifique.
 
 ## AGENTE CRIADOR DE TICKETS
 **Fluxo:** feature (brainstorm) e checkup complexo
+**Modelo:** `claude-sonnet-4-6`
 
 **Entrada (fluxo feature):** `_docs/especificacao.md`
 **Entrada (fluxo checkup complexo):** `_docs/especificacao.md` + ticket existente em `_docs/tickets/`
@@ -229,6 +235,7 @@ Restrições: não escreva código. Apenas planeje e crie os tickets.
 ---
 
 ## AGENTE 3 — Programador
+**Modelo:** `claude-opus-4-7`
 
 **Entrada:** `_docs/tickets/TICKET-YYYYMMDD-NNN.md` (um ticket por vez)
 **Saída:** arquivos de código no projeto + atualiza seção "Implementação" do ticket
@@ -268,6 +275,7 @@ Restrições: não planeje, não decida arquitetura. Execute o que está no tick
 
 ## AGENTE 4 — QA Back-end
 **Fluxo:** somente tickets com caminho `complexo`
+**Modelo:** `claude-sonnet-4-6`
 
 **Entrada:** ticket `_docs/tickets/TICKET-YYYYMMDD-NNN.md` + código implementado
 **Saída:** testes em `tests/` + atualiza seção "QA Back-end" do ticket
@@ -311,6 +319,7 @@ Restrições: não altere código de produção. Se encontrar bug, registre e so
 
 ## AGENTE 5 — QA de UX/UI
 **Fluxo:** somente tickets com caminho `complexo`
+**Modelo:** `claude-sonnet-4-6`
 
 **Entrada:** ticket `_docs/tickets/TICKET-YYYYMMDD-NNN.md` + código implementado
 **Saída:** atualiza seção "QA UX/UI" do ticket
@@ -359,6 +368,7 @@ Restrições: não altere código. Apenas reporte e solicite correções ao Agen
 ---
 
 ## AGENTE 6 — Code Reviewer
+**Modelo:** `claude-opus-4-7`
 
 **Entrada:** ticket `_docs/tickets/TICKET-YYYYMMDD-NNN.md` + código implementado
 **Saída:** refatorações aplicadas no código + seção "Code Review" e Histórico do ticket atualizados
@@ -450,6 +460,8 @@ Restrições: não adicione funcionalidades novas. Apenas melhore o que existe.
 
 ## Regras globais do pipeline
 
+- Cada agente deve ser executado no modelo especificado em seu cabeçalho.
+  Use `/model <model-id>` antes de iniciar cada fase ou spawne sub-agentes com o modelo correto.
 - Se encontrar ambiguidade em qualquer arquivo ou ticket, pare e pergunte ao usuário antes de continuar.
 - O stack é Laravel. Nenhum agente pode introduzir tecnologias fora do stack sem aprovação explícita.
 - Arquivos de documentação ficam em `_docs/` na raiz do projeto.
