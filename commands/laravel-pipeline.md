@@ -31,7 +31,15 @@ Verifique se existe `_docs/brainstorm.md`.
 **Saída:** seção de diagnóstico preenchida no ticket criado pelo Agente Triagem
 
 Missão:
-1. Receba o relato do problema ou log de erro fornecido pelo usuário.
+1. Exiba o cabeçalho de início desta fase:
+   ```
+   ============================================================
+   AGENTE: Checkup (Investigador de Problemas)
+   MODELO: claude-sonnet-4-6
+   STATUS: iniciando
+   ============================================================
+   ```
+2. Receba o relato do problema ou log de erro fornecido pelo usuário.
 2. Investigue a causa raiz:
    - Leia os arquivos de log relevantes do projeto (`storage/logs/`)
    - Rastreie o stack trace até o arquivo e linha de origem
@@ -59,7 +67,15 @@ Restrições: não corrija o código. Apenas investigue e documente.
 **Saída:** `_docs/tickets/TICKET-YYYYMMDD-NNN.md` com classificação e caminho definidos
 
 Missão:
-1. Leia o diagnóstico gerado pelo Checkup.
+1. Exiba o cabeçalho de início desta fase:
+   ```
+   ============================================================
+   AGENTE: Triagem
+   MODELO: claude-haiku-4-5-20251001
+   STATUS: iniciando
+   ============================================================
+   ```
+2. Leia o diagnóstico gerado pelo Checkup.
 2. Verifique o histórico de tickets em `_docs/tickets/` buscando problemas similares.
 3. Classifique o problema:
 
@@ -144,7 +160,15 @@ Restrições: não corrija código. Apenas classifique e crie o ticket.
 **Saída:** `_docs/plano.md` + atualiza seção "Planejamento" do ticket (se checkup)
 
 Missão:
-1. Leia o arquivo de entrada na íntegra.
+1. Exiba o cabeçalho de início desta fase:
+   ```
+   ============================================================
+   AGENTE: 1 — Planejador de Produto
+   MODELO: claude-sonnet-4-6
+   STATUS: iniciando
+   ============================================================
+   ```
+2. Leia o arquivo de entrada na íntegra.
 2. Identifique objetivos, funcionalidades e restrições.
 3. Organize:
    - Visão geral do produto ou da correção
@@ -166,7 +190,15 @@ Foco exclusivo: O QUÊ deve ser construído ou corrigido.
 **Saída:** `_docs/especificacao.md` + atualiza seção "Especificação" do ticket (se checkup)
 
 Missão:
-1. Leia `plano.md` na íntegra.
+1. Exiba o cabeçalho de início desta fase:
+   ```
+   ============================================================
+   AGENTE: 2 — Arquiteto de Código
+   MODELO: claude-opus-4-7
+   STATUS: iniciando
+   ============================================================
+   ```
+2. Leia `plano.md` na íntegra.
 2. Para cada módulo defina com precisão:
    - Estrutura de arquivos Laravel (Controllers, Models, Migrations, Requests,
      Resources, Services, Jobs, Policies, Observers, etc.)
@@ -214,7 +246,15 @@ Restrições: não escreva código de implementação. Apenas especifique.
 **Saída:** um ou mais arquivos `_docs/tickets/TICKET-YYYYMMDD-NNN.md`
 
 Missão:
-1. Leia `especificacao.md` na íntegra.
+1. Exiba o cabeçalho de início desta fase:
+   ```
+   ============================================================
+   AGENTE: Criador de Tickets
+   MODELO: claude-sonnet-4-6
+   STATUS: iniciando
+   ============================================================
+   ```
+2. Leia `especificacao.md` na íntegra.
 2. Quebre a especificação em tickets discretos e independentes:
    - Um ticket por módulo ou unidade de trabalho coesa
    - Cada ticket deve ser implementável de forma isolada pelo Agente 3
@@ -241,7 +281,16 @@ Restrições: não escreva código. Apenas planeje e crie os tickets.
 **Saída:** arquivos de código no projeto + atualiza seção "Implementação" do ticket
 
 Missão:
-1. Leia o ticket atribuído na íntegra, incluindo diagnóstico, especificação e histórico.
+1. Exiba o cabeçalho de início desta fase (inclua o ticket no cabeçalho):
+   ```
+   ============================================================
+   AGENTE: 3 — Programador
+   MODELO: claude-opus-4-7
+   TICKET: <TICKET-YYYYMMDD-NNN>
+   STATUS: iniciando
+   ============================================================
+   ```
+2. Leia o ticket atribuído na íntegra, incluindo diagnóstico, especificação e histórico.
 2. Atualize o status do ticket para `em desenvolvimento` e registre no Histórico.
 3. Implemente SOMENTE o que está descrito no ticket — sem adicionar funcionalidades,
    sem alterar nomes ou estrutura de banco de dados não previstos.
@@ -281,7 +330,16 @@ Restrições: não planeje, não decida arquitetura. Execute o que está no tick
 **Saída:** testes em `tests/` + atualiza seção "QA Back-end" do ticket
 
 Missão:
-1. Leia o ticket na íntegra para entender o que foi implementado.
+1. Exiba o cabeçalho de início desta fase (inclua o ticket no cabeçalho):
+   ```
+   ============================================================
+   AGENTE: 4 — QA Back-end
+   MODELO: claude-sonnet-4-6
+   TICKET: <TICKET-YYYYMMDD-NNN>
+   STATUS: iniciando
+   ============================================================
+   ```
+2. Leia o ticket na íntegra para entender o que foi implementado.
 2. Para cada módulo, escreva testes cobrindo:
 
    **Testes de Unidade**
@@ -325,7 +383,16 @@ Restrições: não altere código de produção. Se encontrar bug, registre e so
 **Saída:** atualiza seção "QA UX/UI" do ticket
 
 Missão:
-1. Leia o ticket na íntegra para entender o fluxo esperado de cada funcionalidade.
+1. Exiba o cabeçalho de início desta fase (inclua o ticket no cabeçalho):
+   ```
+   ============================================================
+   AGENTE: 5 — QA de UX/UI
+   MODELO: claude-sonnet-4-6
+   TICKET: <TICKET-YYYYMMDD-NNN>
+   STATUS: iniciando
+   ============================================================
+   ```
+2. Leia o ticket na íntegra para entender o fluxo esperado de cada funcionalidade.
 2. Para cada módulo implementado, execute e verifique:
 
    **Fluxos funcionais**
@@ -374,7 +441,16 @@ Restrições: não altere código. Apenas reporte e solicite correções ao Agen
 **Saída:** refatorações aplicadas no código + seção "Code Review" e Histórico do ticket atualizados + memória gerada ao finalizar
 
 Missão:
-1. Leia o ticket na íntegra, incluindo diagnóstico, especificação e histórico completo.
+1. Exiba o cabeçalho de início desta fase (inclua o ticket no cabeçalho):
+   ```
+   ============================================================
+   AGENTE: 6 — Code Reviewer
+   MODELO: claude-opus-4-7
+   TICKET: <TICKET-YYYYMMDD-NNN>
+   STATUS: iniciando
+   ============================================================
+   ```
+2. Leia o ticket na íntegra, incluindo diagnóstico, especificação e histórico completo.
 2. Percorra todo o código implementado e avalie:
 
    **Boas práticas Laravel**
@@ -464,15 +540,7 @@ Restrições: não adicione funcionalidades novas. Apenas melhore o que existe.
 
 - Cada agente deve ser executado no modelo especificado em seu cabeçalho.
   Use `/model <model-id>` antes de iniciar cada fase ou spawne sub-agentes com o modelo correto.
-- **Ao iniciar cada fase, exiba obrigatoriamente o seguinte cabeçalho antes de qualquer ação:**
-  ```
-  ============================================================
-  AGENTE: <Nome do Agente>
-  MODELO: <model-id>
-  TICKET: <TICKET-YYYYMMDD-NNN> (se aplicável)
-  STATUS: iniciando
-  ============================================================
-  ```
+- O cabeçalho de início é o passo 1 explícito de cada agente — não pule.
 - Se encontrar ambiguidade em qualquer arquivo ou ticket, pare e pergunte ao usuário antes de continuar.
 - O stack é Laravel. Nenhum agente pode introduzir tecnologias fora do stack sem aprovação explícita.
 - Arquivos de documentação ficam em `_docs/` na raiz do projeto.
