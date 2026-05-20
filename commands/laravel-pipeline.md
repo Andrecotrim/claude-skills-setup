@@ -15,6 +15,9 @@ de entrada do próximo exista e esteja completo.
 **Fluxo:** nova funcionalidade
 **Modelo:** `claude-sonnet-4-6`
 
+> Esta etapa cumpre o requisito da skill `brainstorming` (obra/superpowers).
+> O `/brainstorm` customizado substitui seu uso direto neste pipeline.
+
 Verifique se existe `_docs/brainstorm.md`.
 - Se existir: leia-o e prossiga para o Agente 1.
 - Se não existir: execute `/brainstorm` para conduzir a sessão de descoberta interativa
@@ -310,7 +313,10 @@ Missão:
    e warnings reportados antes de avançar.
 8. Use `context7` para consultar a documentação do Laravel sempre que precisar verificar
    APIs, assinaturas de métodos ou comportamentos do Eloquent.
-9. Ao concluir, preencha a seção "Implementação" do ticket com:
+9. Ao implementar views e componentes Blade, invoque a skill `frontend-design` para garantir
+   que a geração siga padrões visuais de produção — tipografia, espaçamento, estados de UI
+   (loading, vazio, erro) e consistência com o design system do projeto.
+10. Ao concluir, preencha a seção "Implementação" do ticket com:
    - O que foi implementado
    - Arquivos criados ou modificados (incluindo classes Brain geradas)
    - Pendências ou dúvidas encontradas
@@ -412,8 +418,10 @@ Missão:
    - Responsividade: as views funcionam em mobile, tablet e desktop?
    - Acessibilidade básica: atributos `aria-*`, `alt` em imagens, contraste adequado?
    - Consistência visual: tipografia, espaçamentos e cores seguem o design system?
-   - O plugin `frontend-design` está ativo e orienta a geração de componentes Blade com
-     padrões visuais de produção — verifique se a implementação segue suas diretrizes.
+   - Invoque a skill `frontend-design` para avaliar se os componentes Blade gerados
+     atingem padrão visual de produção e evitam estéticas genéricas de IA.
+   - O plugin `frontend-design` complementa a skill com ferramentas adicionais de geração
+     — verifique se ambos estão ativos e se a implementação segue suas diretrizes.
 
 3. Para cada problema encontrado, registre na seção "QA UX/UI" do ticket:
    - Módulo afetado
