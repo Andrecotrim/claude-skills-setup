@@ -464,6 +464,15 @@ Restrições: não adicione funcionalidades novas. Apenas melhore o que existe.
 
 - Cada agente deve ser executado no modelo especificado em seu cabeçalho.
   Use `/model <model-id>` antes de iniciar cada fase ou spawne sub-agentes com o modelo correto.
+- **Ao iniciar cada fase, exiba obrigatoriamente o seguinte cabeçalho antes de qualquer ação:**
+  ```
+  ============================================================
+  AGENTE: <Nome do Agente>
+  MODELO: <model-id>
+  TICKET: <TICKET-YYYYMMDD-NNN> (se aplicável)
+  STATUS: iniciando
+  ============================================================
+  ```
 - Se encontrar ambiguidade em qualquer arquivo ou ticket, pare e pergunte ao usuário antes de continuar.
 - O stack é Laravel. Nenhum agente pode introduzir tecnologias fora do stack sem aprovação explícita.
 - Arquivos de documentação ficam em `_docs/` na raiz do projeto.
