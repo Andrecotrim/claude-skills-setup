@@ -371,7 +371,7 @@ Restrições: não altere código. Apenas reporte e solicite correções ao Agen
 **Modelo:** `claude-opus-4-7`
 
 **Entrada:** ticket `_docs/tickets/TICKET-YYYYMMDD-NNN.md` + código implementado
-**Saída:** refatorações aplicadas no código + seção "Code Review" e Histórico do ticket atualizados
+**Saída:** refatorações aplicadas no código + seção "Code Review" e Histórico do ticket atualizados + memória gerada ao finalizar
 
 Missão:
 1. Leia o ticket na íntegra, incluindo diagnóstico, especificação e histórico completo.
@@ -440,6 +440,8 @@ Missão:
    - Registre no Histórico: data, Agente 6, "Aprovado e finalizado"
    - Gere resumo executivo no ticket: total de arquivos revisados, principais melhorias,
      pontos de atenção para o time
+   - **Gere a memória do ticket** seguindo o processo descrito na seção
+     "Geração de Memória por Ticket" das Regras globais
 
    **REPROVADO — requer correção:**
    - Mude o status do ticket para `reprovado (code review)`
@@ -480,3 +482,71 @@ Restrições: não adicione funcionalidades novas. Apenas melhore o que existe.
 - Arquivos de suporte gerados:
   - `_docs/brainstorm.md` → `_docs/plano.md` → `_docs/especificacao.md`
   - `_docs/tickets/TICKET-YYYYMMDD-NNN.md` (um por unidade de trabalho)
+
+---
+
+## Geração de Memória por Ticket
+
+Ao finalizar um ticket (status `finalizado`), o Agente 6 deve gerar uma memória compacta
+em **dois lugares**, para que futuras conversas retomem o contexto sem reler o ticket completo.
+
+### 1. Derivar o caminho de memória do projeto
+
+Execute `pwd` para obter o caminho do projeto (ex: `/home/auto-house/php-projects/gofood`).
+Converta para o slug de memória substituindo `/` por `-` e removendo a barra inicial:
+`/home/auto-house/php-projects/gofood` → `-home-auto-house-php-projects-gofood`
+
+O caminho de memória do projeto será:
+`~/.claude/projects/<slug>/memory/`
+
+### 2. Criar o arquivo de memória
+
+Salve em **dois locais simultaneamente**:
+- `_docs/memories/MEMORY-TICKET-YYYYMMDD-NNN.md` (versionado no projeto)
+- `~/.claude/projects/<slug>/memory/ticket-YYYYMMDD-NNN-<titulo-kebab>.md` (sistema Claude)
+
+Use o template abaixo — mantenha-o **compacto**: o objetivo é retomar contexto em segundos,
+não reproduzir o ticket. Omita o que for óbvio ou recuperável lendo o código.
+
+```
+---
+name: ticket-YYYYMMDD-NNN-titulo-kebab
+description: [uma linha: o que foi feito e por quê — específico o suficiente para decidir relevância]
+metadata:
+  type: project
+---
+
+**Ticket:** TICKET-YYYYMMDD-NNN | **Tipo:** simples | complexo | **Data:** YYYY-MM-DD
+
+## O que foi feito
+[2-4 linhas descrevendo a solução, não o problema]
+
+## Arquivos-chave
+- `app/...` — [papel do arquivo]
+- `app/...` — [papel do arquivo]
+
+## Decisões e padrões não óbvios
+[Só registre o que surpreenderia um futuro leitor: workarounds, restrições ocultas,
+por que uma abordagem foi preferida sobre outra, gotchas do Laravel ou do Brain]
+
+## Atenção
+[Riscos, débitos técnicos ou pontos que o time deve revisar — omita se não houver]
+```
+
+### 3. Atualizar o índice MEMORY.md do projeto
+
+Adicione uma linha no arquivo `~/.claude/projects/<slug>/memory/MEMORY.md`
+(crie o arquivo se não existir):
+
+```
+- [TICKET-YYYYMMDD-NNN: Título curto](ticket-YYYYMMDD-NNN-titulo-kebab.md) — descrição de uma linha
+```
+
+### Regras da memória
+
+- **Seja seletivo:** só registre o que não é derivável lendo o código ou o git log.
+- **Seja específico:** "corrigiu N+1 em OrderQuery usando eager loading de items.product"
+  é útil; "corrigiu bug de performance" não é.
+- **Não duplique o ticket:** a memória é um atalho, não uma cópia. O ticket completo
+  sempre estará em `_docs/tickets/` para consulta detalhada.
+- Memórias de reincidência devem referenciar o ticket anterior com `[[ticket-anterior]]`.
